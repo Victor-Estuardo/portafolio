@@ -8,7 +8,7 @@ export const perfil = {
   correo: "vl40509@gmail.com",
   linkedin: "https://www.linkedin.com/in/victor-est-lopez-dev",
   github: "https://github.com/Victor-Estuardo",
-  cv: "/cv_Victor_Lopez.pdf",
+  cv: "/CV_Victor_Lopez.pdf",
 };
 
 export const textos = {
