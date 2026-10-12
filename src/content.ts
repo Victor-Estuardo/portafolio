@@ -2,7 +2,7 @@
 
 export const perfil = {
   nombre: "Victor Estuardo López Rodríguez",
-  rol: "Desarrollador Full Stack Jr.",
+  rol: "Desarrollador Full Stack",
   resumen:
     "Construyo aplicaciones web con TypeScript, Remix y PostgreSQL que reemplazan procesos manuales por sistemas claros de usar. Tengo más de 2 años de experiencia automatizando procesos de negocio sobre un ERP.",
   correo: "vl40509@gmail.com",
@@ -15,7 +15,7 @@ export const textos = {
   tagline:
     "Aplicaciones web con TypeScript, Remix y PostgreSQL. Ciudad de Guatemala.",
   contacto:
-    "Busco mi primer puesto como desarrollador fullstack. Si tienes una vacante o quieres ver el proyecto en detalle, escríbeme a",
+    "Busco mi siguiente rol como desarrollador Full Stack. Si tienes una vacante o quieres ver el proyecto en detalle, escríbeme a",
   pie: "Diseño inspirado en el sitio de Brittany Chiang, con código propio. Hecho con React, TypeScript y Tailwind.",
   cv: "Descargar CV en PDF",
   verSitio: "Visitar el sitio",
@@ -83,7 +83,7 @@ export const habilidades = [
   { grupo: "Lenguajes", detalle: "TypeScript, JavaScript, SQL" },
   {
     grupo: "Frontend",
-    detalle: "Remix, React (nivel básico), Tailwind CSS, Ant Design",
+    detalle: "Remix, React, Tailwind CSS, Ant Design",
   },
   {
     grupo: "Backend y datos",
@@ -95,7 +95,6 @@ export const habilidades = [
     detalle:
       "Git, GitHub, VS Code, Postman, Vercel, Netlify, Supabase, Cloudinary",
   },
-  { grupo: "Conocimientos básicos", detalle: "MySQL y Oracle" },
   {
     grupo: "Idiomas",
     detalle: "Español nativo. Inglés técnico: leo documentación y código.",
