@@ -7,68 +7,86 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-noche font-cuerpo text-texto antialiased;
+    @apply bg-arena font-cuerpo text-tinta antialiased;
     font-size: 1.0625rem;
     line-height: 1.7;
   }
   h1,
   h2,
   h3 {
-    @apply font-display text-claro;
-  }
-  a {
-    @apply underline decoration-maiz/50 underline-offset-4;
-  }
-  a:hover {
-    @apply text-claro decoration-maiz;
-  }
-  :focus-visible {
-    outline: 3px solid #f0b429;
-    outline-offset: 3px;
-    border-radius: 2px;
+    @apply font-display;
   }
   ::selection {
-    background: #f0b429;
-    color: #0d1a16;
+    background: #b5532f;
+    color: #ffffff;
+  }
+  :focus-visible {
+    outline: 3px solid #b5532f;
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-/* Banda tejida: único adorno. Se despliega una vez al cargar. */
-.banda {
-  height: 24px;
-  background: url("/band.svg") repeat-x left center;
-  animation: tejer 1.1s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+@layer components {
+  .enlace {
+    @apply underline decoration-terracota/50 underline-offset-[5px] transition-colors hover:text-terracota hover:decoration-terracota;
+  }
+  .nav-link {
+    @apply relative py-1 text-[0.9375rem] font-medium text-suave no-underline transition-colors hover:text-tinta;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    background: #b5532f;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current="true"]::after {
+    transform: scaleX(1);
+  }
+  .nav-link[aria-current="true"] {
+    @apply text-tinta;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold no-underline transition duration-200 hover:-translate-y-0.5;
+  }
+  .btn-primario {
+    @apply bg-terracota text-white hover:bg-[#9f4627];
+  }
+  .btn-borde {
+    @apply border border-borde text-tinta hover:border-tinta;
+  }
 }
-@keyframes tejer {
-  from { clip-path: inset(0 100% 0 0); }
-  to { clip-path: inset(0 0 0 0); }
+
+/* Animación moderada: entrada del hero y aparición suave al hacer scroll. */
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
 }
+.entrada {
+  animation: entrar 0.8s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .banda { animation: none; }
-}
-
-/* Navegación lateral: la sección visible se marca con una línea que se alarga. */
-.nav-link {
-  @apply flex items-center gap-4 py-2 font-display text-base font-medium text-texto no-underline;
-}
-.nav-link::before {
-  content: "";
-  height: 2px;
-  width: 1.5rem;
-  background: currentColor;
-  transition: width 0.2s ease;
-}
-.nav-link:hover,
-.nav-link[aria-current="true"] {
-  @apply text-claro;
-}
-.nav-link:hover::before,
-.nav-link[aria-current="true"]::before {
-  width: 4rem;
-  background: #f0b429;
-}
-
-.btn {
-  @apply inline-flex items-center justify-center px-5 py-3 font-display text-base font-bold no-underline;
+  .entrada { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .btn:hover { transform: none; }
+  .nav-link::after { transition: none; }
 }

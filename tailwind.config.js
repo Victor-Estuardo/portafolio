@@ -4,16 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        noche: "#0D1A16",
-        hoja: "#142520",
-        texto: "#C6D3CC",
-        claro: "#EAF1EC",
-        maiz: "#F0B429",
-        linea: "#27403A",
+        arena: "#F4EFE8",
+        superficie: "#FBF8F3",
+        linea: "#E2D9CC",
+        borde: "#CDBFAE",
+        tinta: "#25201B",
+        suave: "#6B6157",
+        terracota: "#B5532F",
       },
       fontFamily: {
-        display: ['"Familjen Grotesk"', "system-ui", "sans-serif"],
-        cuerpo: ["Literata", "Georgia", "serif"],
+        display: ["Newsreader", "Georgia", "serif"],
+        cuerpo: ["Figtree", "system-ui", "sans-serif"],
       },
     },
   },

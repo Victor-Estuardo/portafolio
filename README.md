@@ -12,8 +12,7 @@ npm run dev
 ## Qué editar
 
 - **Textos y enlaces:** `src/content.ts`. Todo el contenido del sitio está en ese archivo.
-- **Foto (opcional):** guarda una imagen cuadrada como `public/foto.jpg`. Si no existe, el sitio no muestra foto.
-- **CV:** guarda el PDF como `public/CV_Victor_Lopez.pdf`. El botón "Descargar CV" apunta a ese archivo.
+- **Video del proyecto (opcional):** en `proyecto.video` de `src/content.ts` pon el ID de YouTube o la ruta de un mp4 en `public/`. Si ambos están vacíos, no se muestra.
 - **Título y descripción para buscadores:** `index.html`.
 
 ## Publicar gratis en Vercel
@@ -29,6 +28,5 @@ Compra un dominio (.dev, .com o .gt) en cualquier registrador y agrégalo en Ver
 
 ## Antes de publicar
 
-- Agrega `public/CV_Victor_Lopez.pdf` y, si quieres, `public/foto.jpg`.
 - Revisa que los enlaces de `src/content.ts` sigan siendo correctos.
 - Agrega una imagen para compartir en redes (Open Graph) si quieres una vista previa con imagen.

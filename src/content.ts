@@ -3,21 +3,22 @@
 export const perfil = {
   nombre: "Victor Estuardo López Rodríguez",
   rol: "Desarrollador Full Stack",
-  resumen:
-    "Construyo aplicaciones web con TypeScript, Remix y PostgreSQL que reemplazan procesos manuales por sistemas claros de usar. Tengo más de 2 años de experiencia automatizando procesos de negocio sobre un ERP.",
+  titular: {
+    antes: "Sistemas web que reemplazan procesos manuales y se sienten ",
+    destacado: "claros de usar",
+    despues: ".",
+  },
+  intro:
+    "Trabajo con TypeScript, Remix y PostgreSQL. Tengo más de 2 años automatizando procesos de negocio sobre un ERP, y ahora cierro mi ingeniería con un proyecto real para una asociación de adopción.",
   correo: "vl40509@gmail.com",
   linkedin: "https://www.linkedin.com/in/victor-est-lopez-dev",
   github: "https://github.com/Victor-Estuardo",
-  cv: "/CV_Victor_Lopez.pdf",
 };
 
 export const textos = {
-  tagline:
-    "Aplicaciones web con TypeScript, Remix y PostgreSQL. Ciudad de Guatemala.",
   contacto:
-    "Busco mi siguiente rol como desarrollador Full Stack. Si tienes una vacante o quieres ver el proyecto en detalle, escríbeme a",
-  pie: "Diseño inspirado en el sitio de Brittany Chiang, con código propio. Hecho con React, TypeScript y Tailwind.",
-  cv: "Descargar CV en PDF",
+    "Busco mi siguiente rol como desarrollador Full Stack. Si tienes una vacante o quieres ver el proyecto en detalle, escríbeme.",
+  pie: "Hecho con React, TypeScript y Tailwind CSS.",
   verSitio: "Visitar el sitio",
   verCodigo: "Ver el código",
   stack: "Stack: ",
@@ -30,6 +31,13 @@ export const proyecto = {
     "Plataforma de gestión de adopción responsable para la Asociación Meraki. Es mi proyecto de graduación, desarrollado de forma individual entre diciembre de 2025 y octubre de 2026.",
   sitio: "https://adopciones.merakigt.org",
   codigo: "https://github.com/Victor-Estuardo/adopcionesApp",
+  // Video del recorrido: pega el ID de YouTube (video "no listado") o la ruta de un mp4 en /public.
+  // Mientras ambos estén vacíos, el bloque de video no se muestra.
+  video: {
+    youtubeId: "",
+    archivo: "",
+    titulo: "Recorrido por adopcionesApp",
+  },
   bloques: [
     {
       titulo: "El problema",
