@@ -21,6 +21,12 @@ export const textos = {
   pie: "Hecho con React, TypeScript y Tailwind CSS.",
   verSitio: "Visitar el sitio",
   verCodigo: "Ver el código",
+  nuevaPestana: " (abre en una pestaña nueva)",
+  problema: "El problema",
+  construi: "Lo que construí",
+  decisiones: "Decisiones técnicas",
+  proceso: "Cómo lo trabajé",
+  subtituloProyecto: "En producción para la Asociación Meraki",
   stack: "Stack: ",
   irAlContenido: "Ir al contenido",
 };
@@ -38,42 +44,70 @@ export const proyecto = {
     archivo: "",
     titulo: "Recorrido por adopcionesApp",
   },
-  bloques: [
+  // Capturas del sitio en vivo: copia las imágenes a /public y agrégalas aquí, por ejemplo
+  // { src: "/capturas/catalogo.png", alt: "Catálogo de mascotas con filtros" }.
+  // Mientras esté vacío, el bloque de capturas no se muestra.
+  capturas: [] as { src: string; alt: string }[],
+  problema:
+    "La asociación necesitaba un solo lugar para mostrar a las mascotas, recibir solicitudes de adopción, informar sobre donaciones y publicar historias del albergue, con personal administrativo que pueda gestionarlo todo sin tocar código.",
+  construi: [
     {
-      titulo: "El problema",
+      lead: "Catálogo y adopción",
       texto:
-        "La asociación necesitaba un solo lugar para mostrar a las mascotas, recibir solicitudes de adopción, informar sobre donaciones y publicar historias del albergue, con personal administrativo que pueda gestionarlo todo sin tocar código.",
+        "Mascotas con búsqueda y filtros. La solicitud incluye una carta de compromiso aceptada con fecha, hora e IP.",
     },
     {
-      titulo: "Lo que construí",
-      lista: [
-        "Catálogo de mascotas con búsqueda y filtros, y solicitud de adopción con formulario y carta de compromiso aceptada con fecha, hora e IP.",
-        "Cuenta de usuario con verificación de correo, recuperación de contraseña, mascotas guardadas y seguimiento del estado de cada solicitud.",
-        "Módulo de donaciones y transparencia: cuentas bancarias, insumos necesarios, patrocinadores y proyectos con fotos de antes, durante y después.",
-        "Panel administrativo con roles y permisos configurables, estadísticas con gráficos y exportación a Excel.",
-      ],
+      lead: "Cuentas de usuario",
+      texto:
+        "Verificación de correo, recuperación de contraseña, mascotas guardadas y seguimiento del estado de cada solicitud.",
     },
     {
-      titulo: "Decisiones técnicas",
-      lista: [
-        "Los módulos de navegación y los permisos viven en la base de datos, así que el personal activa o desactiva secciones sin desplegar código.",
-        "El control de intentos y las sesiones se guardan en PostgreSQL y no en memoria, para que funcionen en un entorno serverless como Vercel.",
+      lead: "Donaciones y transparencia",
+      texto:
+        "Cuentas bancarias, insumos necesarios, patrocinadores y proyectos con fotos de antes, durante y después.",
+    },
+    {
+      lead: "Panel administrativo",
+      texto:
+        "Roles y permisos configurables, estadísticas con gráficos y exportación a Excel.",
+    },
+  ],
+  decisiones: [
+    {
+      lead: "Módulos en la base de datos",
+      texto:
+        "La navegación y los permisos viven en la base de datos: el personal activa o desactiva secciones sin desplegar código.",
+    },
+    {
+      lead: "Sesiones fuera de la memoria",
+      texto:
+        "El control de intentos y las sesiones se guardan en PostgreSQL para que funcionen en un entorno serverless como Vercel.",
+    },
+    {
+      lead: "Render en el servidor",
+      texto:
         "Las páginas de contenido se renderizan en el servidor para que los metadatos de SEO y la vista previa al compartir salgan con datos reales.",
-        "Las contraseñas usan bcrypt, los tokens son de un solo uso y los mensajes de error no revelan si un usuario existe.",
-      ],
     },
     {
-      titulo: "Cómo lo trabajé",
+      lead: "Seguridad",
       texto:
-        "Escribí los requerimientos funcionales y no funcionales, las historias de usuario, las pruebas manuales y el manual del panel administrativo. El código tiene 25 modelos en Prisma y se desarrolló con ramas y pull requests.",
+        "Contraseñas con bcrypt, tokens de un solo uso y mensajes de error que no revelan si un usuario existe.",
     },
+  ],
+  proceso: [
+    "Requerimientos funcionales y no funcionales",
+    "Historias de usuario",
+    "Pruebas manuales",
+    "Manual del panel administrativo",
+    "25 modelos en Prisma",
+    "Ramas y pull requests",
   ],
   stack:
     "TypeScript, Remix, React, Prisma, PostgreSQL (Supabase), Tailwind CSS, Cloudinary, Resend y Vercel.",
 };
 
 export const experiencia = {
-  cargo: "Desarrollador Web Jr.",
+  cargo: "Desarrollador Web",
   empresa: "DISCOGUA",
   fechas: "Septiembre de 2023 a diciembre de 2025",
   puntos: [

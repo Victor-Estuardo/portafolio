@@ -108,6 +108,36 @@ function Seccion({
   );
 }
 
+function Externo({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className: string;
+  children: ReactNode;
+}) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className={className}>
+      {children}
+      <span className="sr-only">{textos.nuevaPestana}</span>
+    </a>
+  );
+}
+
+function Filas({ items }: { items: { lead: string; texto: string }[] }) {
+  return (
+    <dl className="divide-y divide-linea border-y border-linea">
+      {items.map((i) => (
+        <div key={i.lead} className="py-4">
+          <dt className="font-semibold">{i.lead}</dt>
+          <dd className="mt-1 text-base text-suave">{i.texto}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function Lista({ items }: { items: string[] }) {
   return (
     <ul className="list-disc space-y-3 pl-5 marker:text-terracota">
@@ -164,7 +194,7 @@ export default function App() {
       </a>
 
       <header className="sticky top-0 z-20 bg-arena/85 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-8 gap-y-2 px-6 py-4 sm:px-8">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-8 gap-y-2 px-6 py-3 sm:px-8">
           <a
             href="#inicio"
             className="font-display text-xl font-medium no-underline"
@@ -172,13 +202,13 @@ export default function App() {
             Victor López
           </a>
           <nav aria-label="Secciones">
-            <ul className="flex flex-wrap gap-x-7 gap-y-1">
+            <ul className="flex flex-wrap gap-x-5 sm:gap-x-7">
               {secciones.map((s) => (
                 <li key={s.id}>
                   <a
                     href={`#${s.id}`}
                     className="nav-link"
-                    aria-current={activa === s.id ? "true" : undefined}
+                    aria-current={activa === s.id ? "location" : undefined}
                   >
                     {s.nombre}
                   </a>
@@ -232,45 +262,63 @@ export default function App() {
           id="proyecto"
           n="01"
           titulo={proyecto.nombre}
-          subtitulo="Proyecto de graduación · 2025 a 2026"
+          subtitulo={textos.subtituloProyecto}
         >
-          <p className="mb-8 max-w-[62ch]">{proyecto.descripcion}</p>
+          <p className="max-w-[62ch]">{proyecto.descripcion}</p>
+          <ul className="mb-10 mt-6 flex flex-wrap gap-3">
+            <li>
+              <Externo href={proyecto.sitio} className="btn btn-primario">
+                {textos.verSitio}
+              </Externo>
+            </li>
+            <li>
+              <Externo href={proyecto.codigo} className="btn btn-borde">
+                {textos.verCodigo}
+              </Externo>
+            </li>
+          </ul>
           {hayVideo ? (
-            <div className="mb-8">
+            <div className="mb-10">
               <Video />
             </div>
           ) : null}
-          <ul className="mb-12 flex flex-wrap gap-x-7 gap-y-2 font-semibold">
-            <li>
-              <a
-                href={proyecto.sitio}
-                target="_blank"
-                rel="noreferrer"
-                className="enlace"
-              >
-                {textos.verSitio}
-              </a>
-            </li>
-            <li>
-              <a
-                href={proyecto.codigo}
-                target="_blank"
-                rel="noreferrer"
-                className="enlace"
-              >
-                {textos.verCodigo}
-              </a>
-            </li>
-          </ul>
+          {proyecto.capturas.length ? (
+            <ul className="mb-10 grid gap-4 sm:grid-cols-2">
+              {proyecto.capturas.map((c) => (
+                <li key={c.src}>
+                  <img
+                    src={c.src}
+                    alt={c.alt}
+                    loading="lazy"
+                    className="w-full rounded-xl border border-linea bg-superficie"
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <h3 className="mb-2 text-xl font-medium">{textos.problema}</h3>
+          <p className="mb-12 max-w-[62ch]">{proyecto.problema}</p>
           <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
-            {proyecto.bloques.map((b) => (
-              <div key={b.titulo}>
-                <h3 className="mb-3 text-xl font-medium">{b.titulo}</h3>
-                {"texto" in b && b.texto ? <p>{b.texto}</p> : null}
-                {"lista" in b && b.lista ? <Lista items={b.lista} /> : null}
-              </div>
-            ))}
+            <div>
+              <h3 className="mb-4 text-xl font-medium">{textos.construi}</h3>
+              <Filas items={proyecto.construi} />
+            </div>
+            <div>
+              <h3 className="mb-4 text-xl font-medium">{textos.decisiones}</h3>
+              <Filas items={proyecto.decisiones} />
+            </div>
           </div>
+          <h3 className="mb-4 mt-12 text-xl font-medium">{textos.proceso}</h3>
+          <ul className="flex flex-wrap gap-2">
+            {proyecto.proceso.map((p) => (
+              <li
+                key={p}
+                className="rounded-full border border-linea bg-superficie px-4 py-1.5 text-base"
+              >
+                {p}
+              </li>
+            ))}
+          </ul>
           <p className="mt-10 text-base text-suave">
             <span className="font-semibold text-tinta">{textos.stack}</span>
             {proyecto.stack}
@@ -324,26 +372,19 @@ export default function App() {
           >
             {perfil.correo}
           </a>
-          <ul className="mt-6 flex gap-7 font-semibold">
+          <ul className="mt-4 flex gap-7 font-semibold">
             <li>
-              <a
-                href={perfil.github}
-                target="_blank"
-                rel="noreferrer"
-                className="enlace"
-              >
+              <Externo href={perfil.github} className="enlace inline-block py-2">
                 GitHub
-              </a>
+              </Externo>
             </li>
             <li>
-              <a
+              <Externo
                 href={perfil.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="enlace"
+                className="enlace inline-block py-2"
               >
                 LinkedIn
-              </a>
+              </Externo>
             </li>
           </ul>
         </Seccion>

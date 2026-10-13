@@ -10,7 +10,7 @@ export default {
         borde: "#CDBFAE",
         tinta: "#25201B",
         suave: "#6B6157",
-        terracota: "#B5532F",
+        terracota: "#A4472A",
       },
       fontFamily: {
         display: ["Newsreader", "Georgia", "serif"],
