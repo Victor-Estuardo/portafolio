@@ -34,7 +34,18 @@ function useSeccionActiva() {
       const el = document.getElementById(id);
       if (el) obs.observe(el);
     });
-    return () => obs.disconnect();
+    // La última sección es corta y no alcanza la banda del observer: al llegar al final se marca sola.
+    const alFinal = () => {
+      const fin =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+      if (fin) setActiva(secciones[secciones.length - 1].id);
+    };
+    window.addEventListener("scroll", alFinal, { passive: true });
+    return () => {
+      obs.disconnect();
+      window.removeEventListener("scroll", alFinal);
+    };
   }, []);
   return activa;
 }
@@ -46,6 +57,14 @@ function Reveal({ children }: { children: ReactNode }) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Sin observer, o si la sección ya quedó arriba (enlace directo a #seccion), se muestra de una vez.
+    if (
+      !("IntersectionObserver" in window) ||
+      el.getBoundingClientRect().bottom < 0
+    ) {
+      setVisible(true);
+      return;
+    }
     const obs = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
@@ -53,7 +72,7 @@ function Reveal({ children }: { children: ReactNode }) {
           obs.disconnect();
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0, rootMargin: "0px 0px -8% 0px" },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -179,10 +198,64 @@ function Video() {
   return null;
 }
 
+type CapturaDatos = {
+  src: string;
+  alt: string;
+  pie: string;
+  ruta?: string;
+  ancho: number;
+  alto: number;
+};
+
+/** Captura enmarcada como ventana del sitio; abre la imagen completa en otra pestaña. */
+function Captura({
+  c,
+  prioridad = false,
+}: {
+  c: CapturaDatos;
+  prioridad?: boolean;
+}) {
+  return (
+    <figure>
+      <a
+        href={c.src}
+        target="_blank"
+        rel="noreferrer"
+        className="captura block overflow-hidden rounded-xl border border-linea bg-superficie no-underline"
+      >
+        {c.ruta !== undefined ? (
+          <span className="block truncate border-b border-linea px-4 py-2 text-xs text-suave">
+            adopciones.merakigt.org{c.ruta === "/" ? "" : c.ruta}
+          </span>
+        ) : null}
+        <img
+          src={c.src}
+          alt={c.alt}
+          width={c.ancho}
+          height={c.alto}
+          loading={prioridad ? "eager" : "lazy"}
+          decoding="async"
+          className="block h-auto w-full"
+        />
+        <span className="sr-only">
+          {textos.verImagen}
+          {textos.nuevaPestana}
+        </span>
+      </a>
+      <figcaption className="mt-3 text-sm text-suave">{c.pie}</figcaption>
+    </figure>
+  );
+}
+
 const retraso = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export default function App() {
   const activa = useSeccionActiva();
+  // Al abrir con #seccion, el navegador salta antes de que React pinte: se repite el salto ya montado.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (id) document.getElementById(id)?.scrollIntoView();
+  }, []);
   const hayVideo = Boolean(proyecto.video.youtubeId || proyecto.video.archivo);
   return (
     <>
@@ -193,7 +266,7 @@ export default function App() {
         {textos.irAlContenido}
       </a>
 
-      <header className="sticky top-0 z-20 bg-arena/85 backdrop-blur">
+      <header className="z-20 sm:sticky sm:top-0 bg-arena/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-8 gap-y-2 px-6 py-3 sm:px-8">
           <a
             href="#inicio"
@@ -202,7 +275,7 @@ export default function App() {
             Victor López
           </a>
           <nav aria-label="Secciones">
-            <ul className="flex flex-wrap gap-x-5 sm:gap-x-7">
+            <ul className="flex gap-x-4 sm:gap-x-7">
               {secciones.map((s) => (
                 <li key={s.id}>
                   <a
@@ -221,16 +294,6 @@ export default function App() {
 
       <main id="contenido" className="mx-auto max-w-5xl px-6 sm:px-8">
         <section id="inicio" className="pb-20 pt-14 md:pb-24 md:pt-24">
-          <p
-            className="entrada mb-7 inline-flex items-center gap-3 rounded-full border border-linea bg-superficie px-4 py-1.5 text-sm font-medium text-suave"
-            style={retraso(0)}
-          >
-            <span
-              aria-hidden="true"
-              className="h-2 w-2 rounded-full bg-terracota"
-            />
-            {perfil.rol} · Ciudad de Guatemala
-          </p>
           <h1
             className="entrada max-w-4xl text-[clamp(2.5rem,6vw,4.25rem)] font-normal leading-[1.06] tracking-tight"
             style={retraso(100)}
@@ -243,6 +306,9 @@ export default function App() {
             className="entrada mt-7 max-w-[60ch] text-lg text-suave"
             style={retraso(200)}
           >
+            <span className="font-medium text-tinta">
+              {perfil.rol} en {perfil.ciudad}.
+            </span>{" "}
             {perfil.intro}
           </p>
           <div
@@ -250,10 +316,10 @@ export default function App() {
             style={retraso(300)}
           >
             <a href="#proyecto" className="btn btn-primario">
-              Ver proyecto
+              {textos.verProyecto}
             </a>
-            <a href="#contacto" className="btn btn-borde">
-              Contacto
+            <a href={`mailto:${perfil.correo}`} className="btn btn-borde">
+              {textos.escribeme}
             </a>
           </div>
         </section>
@@ -277,24 +343,13 @@ export default function App() {
               </Externo>
             </li>
           </ul>
+          <div className="mb-14">
+            <Captura c={proyecto.capturas.principal} prioridad />
+          </div>
           {hayVideo ? (
-            <div className="mb-10">
+            <div className="mb-14">
               <Video />
             </div>
-          ) : null}
-          {proyecto.capturas.length ? (
-            <ul className="mb-10 grid gap-4 sm:grid-cols-2">
-              {proyecto.capturas.map((c) => (
-                <li key={c.src}>
-                  <img
-                    src={c.src}
-                    alt={c.alt}
-                    loading="lazy"
-                    className="w-full rounded-xl border border-linea bg-superficie"
-                  />
-                </li>
-              ))}
-            </ul>
           ) : null}
           <h3 className="mb-2 text-xl font-medium">{textos.problema}</h3>
           <p className="mb-12 max-w-[62ch]">{proyecto.problema}</p>
@@ -308,7 +363,22 @@ export default function App() {
               <Filas items={proyecto.decisiones} />
             </div>
           </div>
-          <h3 className="mb-4 mt-12 text-xl font-medium">{textos.proceso}</h3>
+          <h3 className="mb-5 mt-14 text-xl font-medium">
+            {textos.masPantallas}
+          </h3>
+          <div className="grid gap-x-6 gap-y-8 md:grid-cols-[1fr_13rem]">
+            <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+              {proyecto.capturas.galeria.map((c) => (
+                <li key={c.src}>
+                  <Captura c={c} />
+                </li>
+              ))}
+            </ul>
+            <div className="max-w-[15rem] md:max-w-none">
+              <Captura c={proyecto.capturas.movil} />
+            </div>
+          </div>
+          <h3 className="mb-4 mt-14 text-xl font-medium">{textos.proceso}</h3>
           <ul className="flex flex-wrap gap-2">
             {proyecto.proceso.map((p) => (
               <li
@@ -329,13 +399,20 @@ export default function App() {
           <div className="gap-10 md:grid md:grid-cols-[13rem_1fr]">
             <div className="mb-4 md:mb-0">
               <p className="font-semibold">{experiencia.empresa}</p>
-              <p className="text-base text-suave">
+              <Externo
+                href={experiencia.equipo.sitio}
+                className="enlace text-base"
+              >
+                {experiencia.equipo.nombre}
+              </Externo>
+              <p className="mt-1 text-base text-suave">
                 {experiencia.cargo}
                 <br />
                 {experiencia.fechas}
               </p>
             </div>
             <div>
+              <p className="mb-6 max-w-[62ch]">{experiencia.contexto}</p>
               <Lista items={experiencia.puntos} />
               <p className="mt-5 text-base text-suave">
                 <span className="font-semibold text-tinta">{textos.stack}</span>
@@ -343,6 +420,19 @@ export default function App() {
               </p>
             </div>
           </div>
+          <h3 className="mb-2 mt-14 text-xl font-medium">
+            {experiencia.capturas.titulo}
+          </h3>
+          <p className="mb-6 max-w-[62ch] text-base text-suave">
+            {experiencia.capturas.nota}
+          </p>
+          <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+            {experiencia.capturas.items.map((c) => (
+              <li key={c.src}>
+                <Captura c={c} />
+              </li>
+            ))}
+          </ul>
           <div className="mt-12 gap-10 border-t border-linea pt-10 md:grid md:grid-cols-[13rem_1fr]">
             <p className="mb-2 font-semibold md:mb-0">Formación</p>
             <p>

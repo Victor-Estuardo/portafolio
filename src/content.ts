@@ -3,13 +3,14 @@
 export const perfil = {
   nombre: "Victor Estuardo López Rodríguez",
   rol: "Desarrollador Full Stack",
+  ciudad: "Ciudad de Guatemala",
   titular: {
     antes: "Sistemas web que reemplazan procesos manuales y se sienten ",
     destacado: "claros de usar",
     despues: ".",
   },
   intro:
-    "Trabajo con TypeScript, Remix y PostgreSQL. Tengo más de 2 años automatizando procesos de negocio sobre un ERP, y ahora cierro mi ingeniería con un proyecto real para una asociación de adopción.",
+    "Trabajo con TypeScript, Remix y PostgreSQL. Tengo más de 2 años automatizando procesos de negocio sobre un ERP, y construí por mi cuenta la plataforma de adopción que hoy usa una asociación en Guatemala.",
   correo: "vl40509@gmail.com",
   linkedin: "https://www.linkedin.com/in/victor-est-lopez-dev",
   github: "https://github.com/Victor-Estuardo",
@@ -20,6 +21,10 @@ export const textos = {
     "Busco mi siguiente rol como desarrollador Full Stack. Si tienes una vacante o quieres ver el proyecto en detalle, escríbeme.",
   pie: "Hecho con React, TypeScript y Tailwind CSS.",
   verSitio: "Visitar el sitio",
+  verProyecto: "Ver proyecto",
+  escribeme: "Escríbeme",
+  masPantallas: "Más pantallas",
+  verImagen: " (ver imagen completa)",
   verCodigo: "Ver el código",
   nuevaPestana: " (abre en una pestaña nueva)",
   problema: "El problema",
@@ -34,7 +39,7 @@ export const textos = {
 export const proyecto = {
   nombre: "adopcionesApp",
   descripcion:
-    "Plataforma de gestión de adopción responsable para la Asociación Meraki. Es mi proyecto de graduación, desarrollado de forma individual entre diciembre de 2025 y octubre de 2026.",
+    "Plataforma en producción con la que la Asociación Meraki publica sus mascotas, recibe solicitudes de adopción y administra donaciones. La desarrollé de forma individual, desde los requerimientos hasta el manual del panel administrativo.",
   sitio: "https://adopciones.merakigt.org",
   codigo: "https://github.com/Victor-Estuardo/adopcionesApp",
   // Video del recorrido: pega el ID de YouTube (video "no listado") o la ruta de un mp4 en /public.
@@ -44,10 +49,60 @@ export const proyecto = {
     archivo: "",
     titulo: "Recorrido por adopcionesApp",
   },
-  // Capturas del sitio en vivo: copia las imágenes a /public y agrégalas aquí, por ejemplo
-  // { src: "/capturas/catalogo.png", alt: "Catálogo de mascotas con filtros" }.
-  // Mientras esté vacío, el bloque de capturas no se muestra.
-  capturas: [] as { src: string; alt: string }[],
+  // Capturas tomadas de una instancia con datos de prueba; viven en /public/capturas.
+  // `principal` va grande bajo la descripción; `galeria` se muestra después de las decisiones técnicas.
+  // Ancho y alto son los del archivo, para reservar espacio mientras carga.
+  capturas: {
+    principal: {
+      src: "/capturas/admin-estadisticas.webp",
+      alt: "Panel de estadísticas: 8 solicitudes en el periodo, 75 % de aprobación, 5.9 días promedio de decisión, gráfica de tendencia y distribución por estado",
+      pie: "Panel administrativo · Estadísticas con filtros por periodo y exportación a Excel",
+      ruta: "/estadisticas",
+      ancho: 1600,
+      alto: 1000,
+    },
+    galeria: [
+      {
+        src: "/capturas/admin-solicitud.webp",
+        alt: "Detalle de una solicitud de adopción en revisión, con pasos Enviada, En revisión y Decisión final y botones para aprobar o rechazar",
+        pie: "Revisión de solicitudes por etapas",
+        ruta: "/solicitudes",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/admin-rol-permisos.webp",
+        alt: "Formulario de nuevo rol con una matriz de permisos por módulo: leer, crear, actualizar y eliminar",
+        pie: "Roles con permisos por módulo",
+        ruta: "/roles",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/admin-historia-editor.webp",
+        alt: "Editor de historias con estado publicada, categoría, enlace fijo, resumen y contadores de caracteres",
+        pie: "Editor de historias con borrador y publicación",
+        ruta: "/historias",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/catalogo.webp",
+        alt: "Catálogo público de mascotas con buscador, filtros y estado de cada mascota",
+        pie: "Catálogo público con búsqueda y filtros",
+        ruta: "/",
+        ancho: 1600,
+        alto: 1000,
+      },
+    ],
+    movil: {
+      src: "/capturas/ficha-mascota-movil.webp",
+      alt: "Ficha de una mascota en un teléfono, con fotos, datos y botón para solicitar la adopción",
+      pie: "Ficha de mascota en el teléfono",
+      ancho: 780,
+      alto: 1688,
+    },
+  },
   problema:
     "La asociación necesitaba un solo lugar para mostrar a las mascotas, recibir solicitudes de adopción, informar sobre donaciones y publicar historias del albergue, con personal administrativo que pueda gestionarlo todo sin tocar código.",
   construi: [
@@ -109,16 +164,54 @@ export const proyecto = {
 export const experiencia = {
   cargo: "Desarrollador Web",
   empresa: "DISCOGUA",
+  equipo: { nombre: "Equipo Roo", sitio: "https://www.roo.com.gt/" },
   fechas: "Septiembre de 2023 a diciembre de 2025",
+  contexto:
+    "Roo es el equipo de automatización de DISCOGUA, distribuidor autorizado del ERP Zauru en Guatemala. Construíamos addons: aplicaciones web propias que usan las APIs de Zauru para quitarles a las empresas clientes procesos manuales y repetitivos. Éramos 4 programadores y una diseñadora; cada proyecto lo llevábamos en promedio entre 2.",
   puntos: [
-    "Desarrollé funcionalidades en los addons web que automatizan procesos de negocio sobre el ERP Zauru: CRM, compras, contabilidad, AdminCresgo, mensajería, RRHH, SAC y pedidos.",
-    "En el CRM trabajé la gestión de leads y cartera de clientes, cotizaciones en PDF, punto de venta y mensajería por WhatsApp con automatizaciones. El backend usaba AWS (API Gateway y Lambda), con S3, SES y SNS.",
-    "En compras y contabilidad: presupuestos, reembolsos con flujo de autorización, retenciones de IVA, recepción de contenedores, recálculo de costos y confirmación de pagos, con exportación a Excel y PDF.",
-    "En mensajería y SAC: asignación y aprobación de tareas, generación de rutas con Google Maps y encuestas de satisfacción vinculadas a facturas.",
+    "Construí cerca de la mitad del addon de CRM, frontend y backend, durante un año: cartera de clientes, oportunidades, cotizaciones en PDF, punto de venta y chats de WhatsApp con asignación y automatizaciones. Fue el único addon con backend serverless en AWS (API Gateway y Lambda, con S3, SES y SNS).",
+    "Desarrollé solo el addon AdminCresgo, para una importadora de pacas de ropa, a partir del diseño en Figma: ingreso de inventario a reserva, asignación por región con propuesta y autorización, y reasignación.",
+    "Mi primer addon en Roo lo hice solo, incluido el diseño: encuestas de satisfacción del servicio al cliente, generadas desde los formularios de Zauru por cada compra.",
+    "En equipo automaticé procesos de compras, contabilidad y mensajería: cargas masivas, reembolsos con autorización, retenciones de IVA y rutas con Google Maps. Por mi estimación, tareas que tomaban días pasaron a resolverse en horas.",
     "Integré las APIs GraphQL y REST de Zauru con su autenticación OAuth, y la facturación electrónica.",
   ],
   stack:
     "TypeScript, Remix, React, Prisma, PostgreSQL, Tailwind CSS, Redux Toolkit y AWS.",
+  // Pantallas de los addons levantadas con su código original y datos ficticios, sin marca del cliente.
+  capturas: {
+    titulo: "Pantallas de los addons",
+    nota: "Son recreaciones con datos ficticios: los addons originales funcionan sobre Zauru y no se pueden mostrar con información real.",
+    items: [
+      {
+        src: "/capturas/roo/sac-encuesta.webp",
+        alt: "Encuesta de satisfacción con escala de caritas del 1 al 5, comentario y datos del cliente y la factura a la izquierda",
+        pie: "SAC · Encuesta por compra, con diseño propio",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/sac-bandeja.webp",
+        alt: "Bandeja de facturas pendientes de encuestar con filtros por fecha, categoría, etiqueta y vendedor, y opción de reagendar",
+        pie: "SAC · Facturas por encuestar, con filtros y reagendado",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/reservas-asignacion.webp",
+        alt: "Asignación de una categoría de pacas entre cinco regiones con lo vendido, el porcentaje, lo propuesto y lo autorizado",
+        pie: "AdminCresgo · Reparto por región propuesto según ventas",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/reservas-ingreso.webp",
+        alt: "Ingreso de pacas a reserva desde un consolidado, con código, categoría, cantidad y precio sugerido",
+        pie: "AdminCresgo · Ingreso a reserva desde un consolidado",
+        ancho: 1600,
+        alto: 1000,
+      },
+    ],
+  },
 };
 
 export const habilidades = [

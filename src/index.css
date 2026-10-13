@@ -32,7 +32,7 @@
     @apply underline decoration-terracota/50 underline-offset-[5px] transition-colors hover:text-terracota hover:decoration-terracota;
   }
   .nav-link {
-    @apply relative py-2.5 text-[0.9375rem] font-medium text-suave no-underline transition-colors hover:text-tinta;
+    @apply relative whitespace-nowrap py-2.5 text-sm sm:text-[0.9375rem] font-medium text-suave no-underline transition-colors hover:text-tinta;
   }
   .nav-link::after {
     content: "";
@@ -52,6 +52,13 @@
   }
   .nav-link[aria-current="location"] {
     @apply text-tinta;
+  }
+  .captura {
+    box-shadow: 0 18px 40px -26px rgb(60 40 25 / 0.45);
+    @apply transition-[border-color,box-shadow] duration-200 hover:border-borde;
+  }
+  .captura:hover {
+    box-shadow: 0 22px 46px -24px rgb(60 40 25 / 0.55);
   }
   .btn {
     @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold no-underline transition duration-200 hover:-translate-y-0.5;
