@@ -180,8 +180,36 @@ export const experiencia = {
   // Pantallas de los addons levantadas con su código original y datos ficticios, sin marca del cliente.
   capturas: {
     titulo: "Pantallas de los addons",
-    nota: "Son recreaciones con datos ficticios: los addons originales funcionan sobre Zauru y no se pueden mostrar con información real.",
+    nota: "Son recreaciones con datos ficticios: los addons originales funcionan sobre Zauru y no se pueden mostrar con información real. El CRM lo construimos en equipo; SAC y AdminCresgo los hice solo.",
     items: [
+      {
+        src: "/capturas/roo/crm-chat.webp",
+        alt: "Conversación de WhatsApp dentro del CRM, con notas y datos del contacto a la izquierda",
+        pie: "CRM · Conversación de WhatsApp con el cliente",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/crm-cotizacion.webp",
+        alt: "Detalle de una cotización con contacto, productos, cantidades, total en quetzales y datos de entrega",
+        pie: "CRM · Detalle de cotización con productos y entrega",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/crm-interacciones.webp",
+        alt: "Bandeja de chats de WhatsApp y Messenger con último mensaje, hora, vendedor asignado y seguimiento",
+        pie: "CRM · Bandeja de chats por vendedor",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/crm-pos.webp",
+        alt: "Órdenes del punto de venta con referencia, cliente, fecha de entrega, total y saldo pendiente",
+        pie: "CRM · Órdenes del punto de venta",
+        ancho: 1600,
+        alto: 1000,
+      },
       {
         src: "/capturas/roo/sac-encuesta.webp",
         alt: "Encuesta de satisfacción con escala de caritas del 1 al 5, comentario y datos del cliente y la factura a la izquierda",
