@@ -1,4 +1,6 @@
 import {
+  createContext,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -7,8 +9,8 @@ import {
 } from "react";
 import {
   experiencia,
+  extras,
   formacion,
-  habilidades,
   perfil,
   proyecto,
   textos,
@@ -17,8 +19,7 @@ import {
 const secciones = [
   { id: "proyecto", nombre: "Proyecto", n: "01" },
   { id: "experiencia", nombre: "Experiencia", n: "02" },
-  { id: "habilidades", nombre: "Habilidades", n: "03" },
-  { id: "contacto", nombre: "Contacto", n: "04" },
+  { id: "contacto", nombre: "Contacto", n: "03" },
 ];
 
 function useSeccionActiva() {
@@ -157,16 +158,6 @@ function Filas({ items }: { items: { lead: string; texto: string }[] }) {
   );
 }
 
-function Lista({ items }: { items: string[] }) {
-  return (
-    <ul className="list-disc space-y-3 pl-5 marker:text-terracota">
-      {items.map((i) => (
-        <li key={i}>{i}</li>
-      ))}
-    </ul>
-  );
-}
-
 function Video() {
   const { youtubeId, archivo, titulo } = proyecto.video;
   if (youtubeId) {
@@ -207,29 +198,44 @@ type CapturaDatos = {
   alto: number;
 };
 
-/** Captura enmarcada como ventana del sitio; abre la imagen completa en otra pestaña. */
+// Las capturas de 1600 px tienen una versión de 800 px junto a ellas (nombre-800.webp).
+const srcSetDe = (c: CapturaDatos) =>
+  c.ancho === 1600
+    ? `${c.src.replace(/\.webp$/, "-800.webp")} 800w, ${c.src} 1600w`
+    : undefined;
+
+const AbrirVisor = createContext<(c: CapturaDatos) => void>(() => {});
+
+/** Captura enmarcada como ventana del sitio; al activarla se amplía en el visor. */
 function Captura({
   c,
   prioridad = false,
+  sizes = "(min-width: 1024px) 320px, (min-width: 640px) 480px, 100vw",
 }: {
   c: CapturaDatos;
   prioridad?: boolean;
+  sizes?: string;
 }) {
+  const abrir = useContext(AbrirVisor);
   return (
     <figure>
-      <a
-        href={c.src}
-        target="_blank"
-        rel="noreferrer"
-        className="captura block overflow-hidden rounded-xl border border-linea bg-superficie no-underline"
+      <button
+        type="button"
+        onClick={() => abrir(c)}
+        className="captura group relative block w-full overflow-hidden rounded-xl border border-linea bg-superficie text-left"
       >
         {c.ruta !== undefined ? (
-          <span className="block truncate border-b border-linea px-4 py-2 text-xs text-suave">
+          <span
+            aria-hidden="true"
+            className="block truncate border-b border-linea px-4 py-2 text-xs text-suave"
+          >
             adopciones.merakigt.org{c.ruta === "/" ? "" : c.ruta}
           </span>
         ) : null}
         <img
           src={c.src}
+          srcSet={srcSetDe(c)}
+          sizes={srcSetDe(c) ? sizes : undefined}
           alt={c.alt}
           width={c.ancho}
           height={c.alto}
@@ -237,13 +243,129 @@ function Captura({
           decoding="async"
           className="block h-auto w-full"
         />
-        <span className="sr-only">
-          {textos.verImagen}
-          {textos.nuevaPestana}
+        <span className="captura-ampliar" aria-hidden="true">
+          {textos.ampliar}
         </span>
-      </a>
+        <span className="sr-only">. {textos.ampliar}</span>
+      </button>
       <figcaption className="mt-3 text-sm text-suave">{c.pie}</figcaption>
     </figure>
+  );
+}
+
+/** Visor a pantalla completa con <dialog>: Esc, clic fuera o "Cerrar" lo cierran. */
+function Visor({
+  c,
+  onCerrar,
+}: {
+  c: CapturaDatos | null;
+  onCerrar: () => void;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (c && !d.open) d.showModal();
+    if (!c && d.open) d.close();
+  }, [c]);
+  return (
+    <dialog
+      ref={ref}
+      className="visor"
+      aria-label={c?.pie}
+      onClose={onCerrar}
+      onClick={(e) => e.target === ref.current && ref.current?.close()}
+    >
+      {c ? (
+        <figure className="flex max-h-full w-full flex-col sm:w-auto">
+          <div className="visor-lienzo">
+            <img
+              src={c.src}
+              alt={c.alt}
+              width={c.ancho}
+              height={c.alto}
+              className={c.ancho > c.alto ? "visor-ancha" : "visor-alta"}
+            />
+          </div>
+          <figcaption className="flex flex-wrap items-center justify-between gap-3 px-1 pt-3 text-sm text-white/80">
+            <span>
+              {c.pie}
+              {c.ancho > c.alto ? (
+                <span className="block text-white/60 sm:hidden">
+                  {textos.desliza}
+                </span>
+              ) : null}
+            </span>
+            <button
+              type="button"
+              autoFocus
+              onClick={() => ref.current?.close()}
+              className="btn btn-claro"
+            >
+              {textos.cerrar}
+            </button>
+          </figcaption>
+        </figure>
+      ) : null}
+    </dialog>
+  );
+}
+
+function Galeria({
+  items,
+  visibles,
+}: {
+  items: CapturaDatos[];
+  visibles: number;
+}) {
+  const resto = items.slice(visibles);
+  return (
+    <>
+      <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {items.slice(0, visibles).map((c) => (
+          <li key={c.src}>
+            <Captura c={c} />
+          </li>
+        ))}
+      </ul>
+      {resto.length ? (
+        <details className="mas mt-8">
+          <summary className="btn btn-borde">
+            {textos.verMasPantallas} ({resto.length})
+          </summary>
+          <ul className="mt-8 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+            {resto.map((c) => (
+              <li key={c.src}>
+                <Captura c={c} />
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+    </>
+  );
+}
+
+function CopiarCorreo() {
+  const [copiado, setCopiado] = useState(false);
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(perfil.correo);
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2500);
+    } catch {
+      // Sin acceso al portapapeles el correo sigue visible para copiarlo a mano.
+    }
+  };
+  return (
+    <>
+      <button type="button" onClick={copiar} className="btn btn-borde">
+        {copiado ? textos.correoCopiado : textos.copiarCorreo}
+      </button>
+      <span className="sr-only" aria-live="polite">
+        {copiado ? textos.correoCopiado : ""}
+      </span>
+    </>
   );
 }
 
@@ -251,14 +373,16 @@ const retraso = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 
 export default function App() {
   const activa = useSeccionActiva();
+  const [enVisor, setEnVisor] = useState<CapturaDatos | null>(null);
   // Al abrir con #seccion, el navegador salta antes de que React pinte: se repite el salto ya montado.
   useEffect(() => {
     const id = decodeURIComponent(window.location.hash.slice(1));
     if (id) document.getElementById(id)?.scrollIntoView();
   }, []);
   const hayVideo = Boolean(proyecto.video.youtubeId || proyecto.video.archivo);
+  const { galeria, movil } = proyecto.capturas;
   return (
-    <>
+    <AbrirVisor.Provider value={setEnVisor}>
       <a
         href="#contenido"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-30 focus:rounded-lg focus:bg-terracota focus:px-4 focus:py-2 focus:text-white"
@@ -266,13 +390,14 @@ export default function App() {
         {textos.irAlContenido}
       </a>
 
-      <header className="z-20 sm:sticky sm:top-0 bg-arena/85 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-8 gap-y-2 px-6 py-3 sm:px-8">
+      <header className="sticky top-0 z-20 bg-arena/85 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-x-6 px-4 sm:px-8">
           <a
             href="#inicio"
-            className="font-display text-xl font-medium no-underline"
+            className="py-3 font-display text-lg font-medium no-underline sm:text-xl"
           >
-            Victor López
+            <span className="sm:hidden">Victor</span>
+            <span className="hidden sm:inline">Victor López</span>
           </a>
           <nav aria-label="Secciones">
             <ul className="flex gap-x-4 sm:gap-x-7">
@@ -293,7 +418,7 @@ export default function App() {
       </header>
 
       <main id="contenido" className="mx-auto max-w-5xl px-6 sm:px-8">
-        <section id="inicio" className="pb-20 pt-14 md:pb-24 md:pt-24">
+        <section id="inicio" className="pb-16 pt-12 md:pb-20 md:pt-20">
           <h1
             className="entrada max-w-4xl text-[clamp(2.5rem,6vw,4.25rem)] font-normal leading-[1.06] tracking-tight"
             style={retraso(100)}
@@ -322,6 +447,17 @@ export default function App() {
               {textos.escribeme}
             </a>
           </div>
+          <dl
+            className="entrada mt-12 grid gap-y-4 border-t border-linea pt-6 text-base sm:grid-cols-3 sm:gap-x-8"
+            style={retraso(400)}
+          >
+            {perfil.hechos.map((h) => (
+              <div key={h.dt}>
+                <dt className="text-sm text-suave">{h.dt}</dt>
+                <dd className="mt-0.5 font-medium">{h.dd}</dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         <Seccion
@@ -344,7 +480,11 @@ export default function App() {
             </li>
           </ul>
           <div className="mb-14">
-            <Captura c={proyecto.capturas.principal} prioridad />
+            <Captura
+              c={proyecto.capturas.principal}
+              prioridad
+              sizes="(min-width: 1024px) 960px, 100vw"
+            />
           </div>
           {hayVideo ? (
             <div className="mb-14">
@@ -363,36 +503,29 @@ export default function App() {
               <Filas items={proyecto.decisiones} />
             </div>
           </div>
-          <h3 className="mb-5 mt-14 text-xl font-medium">
-            {textos.masPantallas}
-          </h3>
-          <div className="grid gap-x-6 gap-y-8 md:grid-cols-[1fr_13rem]">
-            <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
-              {proyecto.capturas.galeria.map((c) => (
-                <li key={c.src}>
-                  <Captura c={c} />
-                </li>
-              ))}
-            </ul>
-            <div className="max-w-[15rem] md:max-w-none">
-              <Captura c={proyecto.capturas.movil} />
-            </div>
-          </div>
-          <h3 className="mb-4 mt-14 text-xl font-medium">{textos.proceso}</h3>
-          <ul className="flex flex-wrap gap-2">
-            {proyecto.proceso.map((p) => (
-              <li
-                key={p}
-                className="rounded-full border border-linea bg-superficie px-4 py-1.5 text-base"
-              >
-                {p}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-10 text-base text-suave">
+          <h3 className="mb-2 mt-12 text-xl font-medium">{textos.proceso}</h3>
+          <p className="max-w-[62ch]">{proyecto.proceso}</p>
+          <p className="mt-4 text-base text-suave">
             <span className="font-semibold text-tinta">{textos.stack}</span>
             {proyecto.stack}
           </p>
+          <details className="mas mt-10">
+            <summary className="btn btn-borde">
+              {textos.verMasPantallas} ({galeria.length + 1})
+            </summary>
+            <div className="mt-8 grid gap-x-6 gap-y-8 md:grid-cols-[1fr_13rem]">
+              <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+                {galeria.map((c) => (
+                  <li key={c.src}>
+                    <Captura c={c} />
+                  </li>
+                ))}
+              </ul>
+              <div className="max-w-[15rem] md:max-w-none">
+                <Captura c={movil} />
+              </div>
+            </div>
+          </details>
         </Seccion>
 
         <Seccion id="experiencia" n="02" titulo="Experiencia">
@@ -413,7 +546,7 @@ export default function App() {
             </div>
             <div>
               <p className="mb-6 max-w-[62ch]">{experiencia.contexto}</p>
-              <Lista items={experiencia.puntos} />
+              <Filas items={experiencia.puntos} />
               <p className="mt-5 text-base text-suave">
                 <span className="font-semibold text-tinta">{textos.stack}</span>
                 {experiencia.stack}
@@ -426,63 +559,74 @@ export default function App() {
           <p className="mb-6 max-w-[62ch] text-base text-suave">
             {experiencia.capturas.nota}
           </p>
-          <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
-            {experiencia.capturas.items.map((c) => (
-              <li key={c.src}>
-                <Captura c={c} />
-              </li>
-            ))}
-          </ul>
-          <div className="mt-12 gap-10 border-t border-linea pt-10 md:grid md:grid-cols-[13rem_1fr]">
-            <p className="mb-2 font-semibold md:mb-0">Formación</p>
-            <p>
-              {formacion.titulo}, {formacion.institucion}. {formacion.fechas}.
-            </p>
-          </div>
-        </Seccion>
-
-        <Seccion id="habilidades" n="03" titulo="Habilidades">
-          <dl className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-            {habilidades.map((h) => (
-              <div key={h.grupo}>
-                <dt className="mb-1 text-sm font-semibold uppercase tracking-wide text-suave">
-                  {h.grupo}
-                </dt>
-                <dd>{h.detalle}</dd>
+          <Galeria
+            items={experiencia.capturas.items}
+            visibles={experiencia.capturas.visibles}
+          />
+          <dl className="mt-14 divide-y divide-linea border-y border-linea">
+            {[
+              {
+                lead: "Formación",
+                texto: `${formacion.titulo}, ${formacion.institucion}. ${formacion.fechas}.`,
+              },
+              ...extras,
+            ].map((f) => (
+              <div
+                key={f.lead}
+                className="gap-10 py-4 md:grid md:grid-cols-[13rem_1fr]"
+              >
+                <dt className="font-semibold">{f.lead}</dt>
+                <dd className="mt-1 md:mt-0">{f.texto}</dd>
               </div>
             ))}
           </dl>
         </Seccion>
 
-        <Seccion id="contacto" n="04" titulo="Contacto">
+        <Seccion id="contacto" n="03" titulo="Contacto">
           <p className="mb-6 max-w-[56ch]">{textos.contacto}</p>
           <a
             href={`mailto:${perfil.correo}`}
-            className="enlace font-display text-3xl font-medium md:text-4xl"
+            className="enlace break-all font-display text-3xl font-medium md:text-4xl"
           >
             {perfil.correo}
           </a>
-          <ul className="mt-4 flex gap-7 font-semibold">
-            <li>
-              <Externo href={perfil.github} className="enlace inline-block py-2">
-                GitHub
-              </Externo>
-            </li>
-            <li>
-              <Externo
-                href={perfil.linkedin}
-                className="enlace inline-block py-2"
+          <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-3">
+            <CopiarCorreo />
+            <Externo href={perfil.linkedin} className="enlace py-2 font-semibold">
+              {textos.linkedin}
+            </Externo>
+            <Externo href={perfil.github} className="enlace py-2 font-semibold">
+              GitHub
+            </Externo>
+          </div>
+          <h3 className="mb-3 mt-12 text-base font-semibold">
+            {textos.disponibilidadTitulo}
+          </h3>
+          <ol className="max-w-[48rem] divide-y divide-linea border-y border-linea">
+            {textos.disponibilidad.map((d, i) => (
+              <li
+                key={d.lead}
+                className="flex flex-wrap items-baseline gap-x-4 py-3"
               >
-                LinkedIn
-              </Externo>
-            </li>
-          </ul>
+                <span
+                  aria-hidden="true"
+                  className="font-display italic text-terracota"
+                >
+                  {i + 1}
+                </span>
+                <span className="w-24 font-semibold">{d.lead}</span>
+                <span className="text-suave">{d.texto}</span>
+              </li>
+            ))}
+          </ol>
         </Seccion>
-
-        <footer className="border-t border-linea py-10 text-sm text-suave">
-          © 2026 {perfil.nombre}. {textos.pie}
-        </footer>
       </main>
-    </>
+
+      <footer className="mx-auto max-w-5xl border-t border-linea px-6 py-10 text-sm text-suave sm:px-8">
+        © {new Date().getFullYear()} {perfil.nombre}. {textos.pie}
+      </footer>
+
+      <Visor c={enVisor} onCerrar={() => setEnVisor(null)} />
+    </AbrirVisor.Provider>
   );
 }

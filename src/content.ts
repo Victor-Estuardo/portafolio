@@ -14,17 +14,50 @@ export const perfil = {
   correo: "vl40509@gmail.com",
   linkedin: "https://www.linkedin.com/in/victor-est-lopez-dev",
   github: "https://github.com/Victor-Estuardo",
+  // Franja bajo el hero: lo que un reclutador necesita saber sin bajar.
+  hechos: [
+    {
+      dt: "Último proyecto",
+      dd: "adopcionesApp, en producción (dic. 2025 – oct. 2026)",
+    },
+    { dt: "Experiencia", dd: "DISCOGUA · equipo Roo (2023 – 2025)" },
+    {
+      dt: "Disponibilidad",
+      dd: "Remoto disponibilidad inmediata · híbrido o presencial desde dic. 2026 – ene. 2027",
+    },
+  ],
 };
 
 export const textos = {
   contacto:
     "Busco mi siguiente rol como desarrollador Full Stack. Si tienes una vacante o quieres ver el proyecto en detalle, escríbeme.",
-  pie: "Hecho con React, TypeScript y Tailwind CSS.",
+  // En orden de preferencia.
+  disponibilidad: [
+    { lead: "Remoto", texto: "Disponibilidad inmediata." },
+    {
+      lead: "Híbrido",
+      texto:
+        "En Ciudad de Guatemala, a partir de diciembre de 2026 o enero de 2027.",
+    },
+    {
+      lead: "Presencial",
+      texto:
+        "En Ciudad de Guatemala, a partir de diciembre de 2026 o enero de 2027.",
+    },
+  ],
+  disponibilidadTitulo: "Modalidad, en orden de preferencia",
+  copiarCorreo: "Copiar correo",
+  correoCopiado: "Correo copiado",
+  linkedin: "Perfil completo en LinkedIn",
+  pie: "Ciudad de Guatemala.",
+  verMasPantallas: "Ver más pantallas",
+  ampliar: "Ampliar",
+  cerrar: "Cerrar",
+  desliza: "Desliza para recorrer la pantalla completa.",
   verSitio: "Visitar el sitio",
   verProyecto: "Ver proyecto",
   escribeme: "Escríbeme",
   masPantallas: "Más pantallas",
-  verImagen: " (ver imagen completa)",
   verCodigo: "Ver el código",
   nuevaPestana: " (abre en una pestaña nueva)",
   problema: "El problema",
@@ -149,14 +182,8 @@ export const proyecto = {
         "Contraseñas con bcrypt, tokens de un solo uso y mensajes de error que no revelan si un usuario existe.",
     },
   ],
-  proceso: [
-    "Requerimientos funcionales y no funcionales",
-    "Historias de usuario",
-    "Pruebas manuales",
-    "Manual del panel administrativo",
-    "25 modelos en Prisma",
-    "Ramas y pull requests",
-  ],
+  proceso:
+    "Partí de requerimientos funcionales y no funcionales e historias de usuario; modelé 25 tablas en Prisma, trabajé con ramas y pull requests, hice pruebas manuales y entregué un manual del panel administrativo.",
   stack:
     "TypeScript, Remix, React, Prisma, PostgreSQL (Supabase), Tailwind CSS, Cloudinary, Resend y Vercel.",
 };
@@ -169,11 +196,31 @@ export const experiencia = {
   contexto:
     "Roo es el equipo de automatización de DISCOGUA, distribuidor autorizado del ERP Zauru en Guatemala. Construíamos addons: aplicaciones web propias que usan las APIs de Zauru para quitarles a las empresas clientes procesos manuales y repetitivos. Éramos 4 programadores y una diseñadora; cada proyecto lo llevábamos en promedio entre 2.",
   puntos: [
-    "Construí cerca de la mitad del addon de CRM, frontend y backend, durante un año: cartera de clientes, oportunidades, cotizaciones en PDF, punto de venta y chats de WhatsApp con asignación y automatizaciones. Fue el único addon con backend serverless en AWS (API Gateway y Lambda, con S3, SES y SNS).",
-    "Desarrollé solo el addon AdminCresgo, para una importadora de pacas de ropa, a partir del diseño en Figma: ingreso de inventario a reserva, asignación por región con propuesta y autorización, y reasignación.",
-    "Mi primer addon en Roo lo hice solo, incluido el diseño: encuestas de satisfacción del servicio al cliente, generadas desde los formularios de Zauru por cada compra.",
-    "En equipo automaticé procesos de compras, contabilidad y mensajería: cargas masivas, reembolsos con autorización, retenciones de IVA y rutas con Google Maps. Por mi estimación, tareas que tomaban días pasaron a resolverse en horas.",
-    "Integré las APIs GraphQL y REST de Zauru con su autenticación OAuth, y la facturación electrónica.",
+    {
+      lead: "CRM · en equipo",
+      texto:
+        "Construí cerca de la mitad, frontend y backend, durante un año: cartera, oportunidades, cotizaciones en PDF, punto de venta y chats de WhatsApp con automatizaciones. Backend serverless en AWS (API Gateway, Lambda, S3, SES y SNS).",
+    },
+    {
+      lead: "SAC · individual",
+      texto:
+        "Mi primer addon, incluido el diseño: encuestas de satisfacción generadas desde los formularios de Zauru por cada compra.",
+    },
+    {
+      lead: "AdminCresgo · individual",
+      texto:
+        "Para una importadora de pacas de ropa, a partir del diseño en Figma: ingreso de inventario a reserva, reparto por región con propuesta y autorización, y reasignación.",
+    },
+    {
+      lead: "Automatizaciones · en equipo",
+      texto:
+        "Compras, contabilidad y mensajería: cargas masivas, reembolsos con autorización, retenciones de IVA y rutas con Google Maps. Por mi estimación, tareas de días pasaron a resolverse en horas.",
+    },
+    {
+      lead: "Integraciones",
+      texto:
+        "APIs GraphQL y REST de Zauru con su autenticación OAuth, y facturación electrónica.",
+    },
   ],
   stack:
     "TypeScript, Remix, React, Prisma, PostgreSQL, Tailwind CSS, Redux Toolkit y AWS.",
@@ -181,11 +228,27 @@ export const experiencia = {
   capturas: {
     titulo: "Pantallas de los addons",
     nota: "Son recreaciones con datos ficticios: los addons originales funcionan sobre Zauru y no se pueden mostrar con información real. El CRM lo construimos en equipo; SAC y AdminCresgo los hice solo.",
+    // Las primeras `visibles` se muestran siempre (una por addon); el resto queda detrás de "Ver más pantallas".
+    visibles: 3,
     items: [
       {
         src: "/capturas/roo/crm-chat.webp",
         alt: "Conversación de WhatsApp dentro del CRM, con notas y datos del contacto a la izquierda",
         pie: "CRM · Conversación de WhatsApp con el cliente",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/sac-encuesta.webp",
+        alt: "Encuesta de satisfacción con escala de caritas del 1 al 5, comentario y datos del cliente y la factura a la izquierda",
+        pie: "SAC · Encuesta por compra, con diseño propio",
+        ancho: 1600,
+        alto: 1000,
+      },
+      {
+        src: "/capturas/roo/reservas-asignacion.webp",
+        alt: "Asignación de una categoría de pacas entre cinco regiones con lo vendido, el porcentaje, lo propuesto y lo autorizado",
+        pie: "AdminCresgo · Reparto por región propuesto según ventas",
         ancho: 1600,
         alto: 1000,
       },
@@ -211,23 +274,9 @@ export const experiencia = {
         alto: 1000,
       },
       {
-        src: "/capturas/roo/sac-encuesta.webp",
-        alt: "Encuesta de satisfacción con escala de caritas del 1 al 5, comentario y datos del cliente y la factura a la izquierda",
-        pie: "SAC · Encuesta por compra, con diseño propio",
-        ancho: 1600,
-        alto: 1000,
-      },
-      {
         src: "/capturas/roo/sac-bandeja.webp",
         alt: "Bandeja de facturas pendientes de encuestar con filtros por fecha, categoría, etiqueta y vendedor, y opción de reagendar",
         pie: "SAC · Facturas por encuestar, con filtros y reagendado",
-        ancho: 1600,
-        alto: 1000,
-      },
-      {
-        src: "/capturas/roo/reservas-asignacion.webp",
-        alt: "Asignación de una categoría de pacas entre cinco regiones con lo vendido, el porcentaje, lo propuesto y lo autorizado",
-        pie: "AdminCresgo · Reparto por región propuesto según ventas",
         ancho: 1600,
         alto: 1000,
       },
@@ -242,25 +291,16 @@ export const experiencia = {
   },
 };
 
-export const habilidades = [
-  { grupo: "Lenguajes", detalle: "TypeScript, JavaScript, SQL" },
+// Filas al final de Experiencia: lo que no aparece en el stack de cada trabajo.
+export const extras = [
   {
-    grupo: "Frontend",
-    detalle: "Remix, React, Tailwind CSS, Ant Design",
+    lead: "Herramientas",
+    texto:
+      "Git y GitHub, Postman, Ant Design, Supabase, Cloudinary, Vercel y Netlify.",
   },
   {
-    grupo: "Backend y datos",
-    detalle:
-      "Node.js, Prisma, PostgreSQL, APIs REST y GraphQL, AWS (API Gateway, Lambda, S3, SES)",
-  },
-  {
-    grupo: "Herramientas",
-    detalle:
-      "Git, GitHub, VS Code, Postman, Vercel, Netlify, Supabase, Cloudinary",
-  },
-  {
-    grupo: "Idiomas",
-    detalle: "Español nativo. Inglés técnico: leo documentación y código.",
+    lead: "Idiomas",
+    texto: "Español nativo. Inglés técnico: leo documentación y código.",
   },
 ];
 

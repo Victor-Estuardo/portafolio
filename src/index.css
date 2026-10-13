@@ -32,7 +32,7 @@
     @apply underline decoration-terracota/50 underline-offset-[5px] transition-colors hover:text-terracota hover:decoration-terracota;
   }
   .nav-link {
-    @apply relative whitespace-nowrap py-2.5 text-sm sm:text-[0.9375rem] font-medium text-suave no-underline transition-colors hover:text-tinta;
+    @apply relative inline-block whitespace-nowrap py-3 text-sm sm:text-[0.9375rem] font-medium text-suave no-underline transition-colors hover:text-tinta;
   }
   .nav-link::after {
     content: "";
@@ -59,6 +59,63 @@
   }
   .captura:hover {
     box-shadow: 0 22px 46px -24px rgb(60 40 25 / 0.55);
+  }
+  /* Etiqueta "Ampliar" sobre cada captura: aparece al pasar el cursor o con el foco del teclado. */
+  .captura-ampliar {
+    @apply pointer-events-none absolute bottom-3 right-3 rounded-full bg-tinta/85 px-3 py-1 text-xs font-semibold text-white opacity-0 transition-opacity duration-200;
+  }
+  .captura:hover .captura-ampliar,
+  .captura:focus-visible .captura-ampliar {
+    opacity: 1;
+  }
+  @media (hover: none) {
+    .captura-ampliar {
+      opacity: 1;
+    }
+  }
+  /* "Ver más pantallas": el resumen se ve como botón y se oculta al abrir. */
+  details.mas > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  details.mas > summary::-webkit-details-marker {
+    display: none;
+  }
+  details.mas[open] > summary {
+    display: none;
+  }
+  .visor {
+    @apply m-0 h-full max-h-none w-full max-w-none bg-transparent p-4 sm:p-8;
+  }
+  .visor[open] {
+    @apply flex items-center justify-center;
+  }
+  .visor::backdrop {
+    background: rgb(24 18 14 / 0.92);
+  }
+  .visor-lienzo {
+    @apply max-h-[78vh] max-w-full overflow-auto rounded-lg;
+  }
+  .visor-lienzo img {
+    @apply block h-auto rounded-lg;
+  }
+  /* En el teléfono la captura ancha se muestra a tamaño legible y se recorre deslizando. */
+  .visor-ancha {
+    width: 1100px;
+    max-width: none;
+  }
+  .visor-alta {
+    @apply mx-auto max-h-[78vh] w-auto;
+  }
+  @media (min-width: 640px) {
+    .visor-ancha {
+      width: auto;
+      max-width: min(1400px, 92vw);
+      max-height: 78vh;
+    }
+  }
+  .btn-claro {
+    @apply bg-white text-tinta hover:bg-arena;
   }
   .btn {
     @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold no-underline transition duration-200 hover:-translate-y-0.5;
