@@ -148,7 +148,7 @@ function Seccion({
           <div className="mb-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-3 md:mb-10">
             <h2
               id={`${id}-titulo`}
-              className="text-[clamp(2.75rem,6vw,4.5rem)] leading-[0.95] tracking-[-0.02em]"
+              className="text-[clamp(2.25rem,4.8vw,3.5rem)] leading-[1] tracking-[-0.02em]"
             >
               {titulo}
             </h2>
@@ -528,11 +528,11 @@ export default function App() {
                 style={retraso(80)}
               >
                 <div>
-                  <h1 className="text-balance text-[clamp(2.75rem,5.6vw,4.5rem)] leading-[1.02] tracking-[-0.02em]">
+                  <h1 className="text-balance text-[clamp(2.25rem,4.4vw,3.5rem)] leading-[1.06] tracking-[-0.02em]">
                     {perfil.titular.antes}
-                    <em className="text-terracota">
+                    <span className="text-terracota">
                       {perfil.titular.destacado}
-                    </em>
+                    </span>
                     {perfil.titular.despues}
                   </h1>
                   <p className="mt-6 max-w-[56ch] text-[1.0625rem] text-suave">
@@ -661,10 +661,10 @@ export default function App() {
           ) : null}
 
           <Reveal className="mt-16 grid gap-4 lg:grid-cols-12 lg:gap-10">
-            <h3 className="font-display text-[2rem] leading-none tracking-[-0.01em] lg:col-span-4">
+            <h3 className="font-display text-[1.75rem] leading-tight tracking-[-0.01em] lg:col-span-4">
               {textos.problema}
             </h3>
-            <p className="max-w-[44ch] font-display text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.25] lg:col-span-8">
+            <p className="max-w-[44ch] font-display text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.3] lg:col-span-8">
               {proyecto.problema}
             </p>
           </Reveal>
@@ -782,7 +782,7 @@ export default function App() {
           </div>
 
           <Reveal className="mt-16">
-            <h3 className="font-display text-[2rem] leading-none tracking-[-0.01em]">
+            <h3 className="font-display text-[1.75rem] leading-tight tracking-[-0.01em]">
               {experiencia.capturas.titulo}
             </h3>
             <p className="mb-8 mt-3 max-w-[62ch] text-[0.9375rem] text-suave">
@@ -794,7 +794,7 @@ export default function App() {
           <div className="mt-16 grid gap-4 lg:grid-cols-12">
             <Reveal className="tarjeta p-6 sm:p-8 lg:col-span-8">
               <h3 className="titulo-tarjeta">{textos.formacion}</h3>
-              <p className="mt-4 max-w-[28ch] font-display text-[1.75rem] leading-[1.15]">
+              <p className="mt-4 max-w-[30ch] font-display text-[1.5rem] leading-[1.2]">
                 {formacion.titulo}
               </p>
               <p className="mt-3 text-[0.9375rem] text-suave">
@@ -819,12 +819,12 @@ export default function App() {
         <Seccion id="contacto" titulo={textos.tituloContacto}>
           <Reveal className="tarjeta grid gap-10 rounded-3xl p-7 sm:p-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-7">
-              <p className="max-w-[34ch] font-display text-[clamp(1.75rem,3vw,2.25rem)] leading-[1.2]">
+              <p className="max-w-[34ch] font-display text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.25]">
                 {textos.contacto}
               </p>
               <a
                 href={`mailto:${perfil.correo}`}
-                className="enlace mt-8 block break-all font-display text-[clamp(1.75rem,4.2vw,2.75rem)] leading-tight"
+                className="enlace mt-8 block break-all font-display text-[clamp(1.4rem,3.4vw,2.35rem)] leading-tight"
               >
                 {perfil.correo}
               </a>

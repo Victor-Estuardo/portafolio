@@ -16,7 +16,7 @@ export default {
         activo: "#2F8F5B", // solo el punto de disponibilidad
       },
       fontFamily: {
-        display: ['"Instrument Serif"', "Georgia", "serif"],
+        display: ["Fraunces", "Georgia", "serif"],
         cuerpo: ["Geist", "system-ui", "sans-serif"],
       },
       boxShadow: {
