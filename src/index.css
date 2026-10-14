@@ -5,15 +5,22 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #cfcdc5 transparent;
   }
   body {
     @apply bg-arena font-cuerpo text-tinta antialiased;
-    font-size: 1.0625rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    line-height: 1.65;
+    caret-color: #a4472a;
   }
   h1,
   h2,
   h3 {
+    font-weight: 400;
+  }
+  h1,
+  h2 {
     @apply font-display;
   }
   ::selection {
@@ -21,46 +28,73 @@
     color: #ffffff;
   }
   :focus-visible {
-    outline: 3px solid #a4472a;
+    outline: 2px solid #a4472a;
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cfcdc5;
+    border: 3px solid #f4f4f1;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b8b5ab;
   }
 }
 
 @layer components {
+  /* Tarjeta: superficie blanca, borde fino y radio generoso. */
+  .tarjeta {
+    @apply rounded-2xl border border-linea bg-superficie shadow-tarjeta;
+  }
+  .tarjeta-viva {
+    @apply tarjeta transition duration-300 ease-out hover:-translate-y-0.5 hover:border-borde hover:shadow-elevada;
+  }
+  .titulo-tarjeta {
+    @apply font-cuerpo text-lg font-semibold tracking-tight;
+  }
   .enlace {
-    @apply underline decoration-terracota/50 underline-offset-[5px] transition-colors hover:text-terracota hover:decoration-terracota;
+    @apply underline decoration-terracota/40 underline-offset-[5px] transition-colors hover:text-terracota hover:decoration-terracota;
   }
+
+  /* Navegación en píldora; la sección activa se rellena. */
   .nav-link {
-    @apply relative inline-block whitespace-nowrap py-3 text-sm sm:text-[0.9375rem] font-medium text-suave no-underline transition-colors hover:text-tinta;
-  }
-  .nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 2px;
-    height: 2px;
-    width: 100%;
-    background: #a4472a;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.25s ease;
-  }
-  .nav-link:hover::after,
-  .nav-link[aria-current="location"]::after {
-    transform: scaleX(1);
+    @apply inline-flex h-9 items-center whitespace-nowrap rounded-full px-1.5 text-[0.8125rem] font-medium text-suave no-underline transition-colors hover:text-tinta min-[380px]:px-2 sm:px-4 sm:text-sm;
   }
   .nav-link[aria-current="location"] {
-    @apply text-tinta;
+    @apply bg-tinta text-white;
   }
+
+  .btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 text-[0.9375rem] font-medium no-underline transition duration-200;
+  }
+  .btn-primario {
+    @apply bg-tinta text-white hover:bg-terracota;
+  }
+  .btn-borde {
+    @apply border border-borde bg-superficie text-tinta hover:border-tinta;
+  }
+  .btn-claro {
+    @apply bg-white text-tinta hover:bg-arena;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-linea bg-superficie px-3 py-1.5 text-sm text-tinta;
+  }
+  .filtro {
+    @apply inline-flex h-9 items-center rounded-full border border-linea bg-superficie px-4 text-sm font-medium text-suave transition-colors hover:text-tinta;
+  }
+  .filtro[aria-pressed="true"] {
+    @apply border-tinta bg-tinta text-white;
+  }
+
+  /* Capturas enmarcadas como ventana de navegador. */
   .captura {
-    box-shadow: 0 18px 40px -26px rgb(60 40 25 / 0.45);
-    @apply transition-[border-color,box-shadow] duration-200 hover:border-borde;
+    @apply shadow-tarjeta transition duration-300 ease-out hover:border-borde hover:shadow-elevada;
   }
-  .captura:hover {
-    box-shadow: 0 22px 46px -24px rgb(60 40 25 / 0.55);
-  }
-  /* Etiqueta "Ampliar" sobre cada captura: aparece al pasar el cursor o con el foco del teclado. */
   .captura-ampliar {
     @apply pointer-events-none absolute bottom-3 right-3 rounded-full bg-tinta/85 px-3 py-1 text-xs font-semibold text-white opacity-0 transition-opacity duration-200;
   }
@@ -73,17 +107,8 @@
       opacity: 1;
     }
   }
-  /* "Ver más pantallas": el resumen se ve como botón y se oculta al abrir. */
-  details.mas > summary {
-    list-style: none;
-    cursor: pointer;
-  }
-  details.mas > summary::-webkit-details-marker {
-    display: none;
-  }
-  details.mas[open] > summary {
-    display: none;
-  }
+
+  /* Visor a pantalla completa. */
   .visor {
     @apply m-0 h-full max-h-none w-full max-w-none bg-transparent p-4 sm:p-8;
   }
@@ -91,13 +116,13 @@
     @apply flex items-center justify-center;
   }
   .visor::backdrop {
-    background: rgb(24 18 14 / 0.92);
+    background: rgb(20 20 18 / 0.9);
   }
   .visor-lienzo {
-    @apply max-h-[78vh] max-w-full overflow-auto rounded-lg;
+    @apply max-h-[78vh] max-w-full overflow-auto rounded-xl;
   }
   .visor-lienzo img {
-    @apply block h-auto rounded-lg;
+    @apply block h-auto rounded-xl;
   }
   /* En el teléfono la captura ancha se muestra a tamaño legible y se recorre deslizando. */
   .visor-ancha {
@@ -114,43 +139,121 @@
       max-height: 78vh;
     }
   }
-  .btn-claro {
-    @apply bg-white text-tinta hover:bg-arena;
-  }
-  .btn {
-    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold no-underline transition duration-200 hover:-translate-y-0.5;
-  }
-  .btn-primario {
-    @apply bg-terracota text-white hover:bg-[#8a3c22];
-  }
-  .btn-borde {
-    @apply border border-borde text-tinta hover:border-tinta;
-  }
 }
 
-/* Animación moderada: entrada del hero y aparición suave al hacer scroll. */
+/* Con el visor abierto la página de fondo no se desplaza. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* Movimiento: entrada del titular, aparición al hacer scroll, cinta de tecnologías y el pulso de disponibilidad. */
 @keyframes entrar {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
 }
 .entrada {
-  animation: entrar 0.8s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+  animation: entrar 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--d, 0ms);
 }
-.reveal {
+
+/* Sin JavaScript el contenido ya es visible; con él, aparece al entrar en pantalla. */
+.js .reveal {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(16px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
 }
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: none;
 }
 
+@keyframes cinta {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.cinta {
+  mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+}
+.cinta-pista {
+  animation: cinta 55s linear infinite;
+}
+.cinta:hover .cinta-pista,
+.cinta:focus-within .cinta-pista {
+  animation-play-state: paused;
+}
+
+@keyframes pulso {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.punto-activo {
+  position: relative;
+}
+.punto-activo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #2f8f5b;
+  animation: pulso 2.4s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .entrada { animation: none; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .btn:hover { transform: none; }
-  .nav-link::after { transition: none; }
+  html {
+    scroll-behavior: auto;
+  }
+  .entrada {
+    animation: none;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .cinta {
+    mask-image: none;
+  }
+  .cinta-pista {
+    animation: none;
+    width: 100%;
+  }
+  .cinta-pista > ul {
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.75rem;
+    padding-inline: 1rem;
+  }
+  .cinta-copia {
+    display: none;
+  }
+  .punto-activo::after {
+    animation: none;
+    display: none;
+  }
+  .tarjeta-viva,
+  .btn {
+    transition: none;
+  }
+  .tarjeta-viva:hover {
+    transform: none;
+  }
 }
