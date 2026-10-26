@@ -11,7 +11,7 @@ export const perfil = {
   },
   intro:
     "Trabajo con TypeScript, Remix y PostgreSQL. Tengo más de 2 años automatizando procesos de negocio sobre un ERP, y construí por mi cuenta la plataforma de adopción que hoy usa una asociación en Guatemala.",
-  correo: "vl40509@gmail.com",
+  correo: "contacto@victorestuardo.com",
   linkedin: "https://www.linkedin.com/in/victor-est-lopez-dev",
   github: "https://github.com/Victor-Estuardo",
   // Estado junto al titular y en el encabezado.
@@ -386,7 +386,11 @@ export const stack = {
         { id: "prisma", nota: "ORM, 25 tablas en adopcionesApp" },
         { id: "postgresql", nota: "Base de datos" },
         { id: "supabase", nota: "PostgreSQL gestionado" },
-        { id: "graphql", nombre: "GraphQL y REST", nota: "APIs de Zauru con OAuth" },
+        {
+          id: "graphql",
+          nombre: "GraphQL y REST",
+          nota: "APIs de Zauru con OAuth",
+        },
         { id: "aws", nota: "API Gateway, Lambda, S3, SES y SNS" },
         { id: "resend", nota: "Correo" },
       ],
